@@ -30,26 +30,29 @@ jobs:
       - name: Set Variables for [Main] branch
         if: github.ref == 'refs/heads/main'
         run: |
-          echo "APIGEE_ORG=bap-amer-coe-demo1" >> $GITHUB_ENV
-          echo "APIGEE_ENV=test" >> $GITHUB_ENV
-          echo "DEPLOYMENT_USER=cicduser" >> $GITHUB_ENV
-          echo "DEPLOYMENT_SUFFIX=$(echo "")" >> $GITHUB_ENV
+          echo "APIGEE_ORG=bap-amer-coe-demo1"
+          echo "APIGEE_PROFILE=test"
+          echo "DEPLOYMENT_USER=cicduser"
+          echo "DEPLOYMENT_SUFFIX=$(echo "")"
 
       - name: Set Variables for [Prod] branch
         if: github.ref == 'refs/heads/prod'
         run: |
-          echo "APIGEE_ORG=sai-apigeex-demo" >> $GITHUB_ENV
-          echo "APIGEE_ENV=prod" >> $GITHUB_ENV
-          echo "DEPLOYMENT_USER=cicduser" >> $GITHUB_ENV
-          echo "DEPLOYMENT_SUFFIX=$(echo "")" >> $GITHUB_ENV
+          echo "APIGEE_ORG=sai-apigeex-demo"
+          echo "APIGEE_PROFILE=prod"
+          echo "DEPLOYMENT_USER=cicduser"
+          echo "DEPLOYMENT_SUFFIX=$(echo "")"
       
       - name: Set Variables for branch not [Main], not [Prod]
         if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/prod'
         run: |
-          echo "APIGEE_ORG=bap-amer-coe-demo1" >> $GITHUB_ENV
-          echo "APIGEE_ENV=dev" >> $GITHUB_ENV
-          echo "DEPLOYMENT_USER=cicduser" >> $GITHUB_ENV
-          echo "DEPLOYMENT_SUFFIX=$(echo "")" >> $GITHUB_ENV
+          echo "APIGEE_ORG=bap-amer-coe-demo1"
+          echo "APIGEE_PROFILE=dev"
+          echo "DEPLOYMENT_USER=cicduser"
+          echo "DEPLOYMENT_SUFFIX=$(echo "")"
+
+      - name: Print
+        run: echo "APIGEE_ORG ${{ APIGEE_ORG }}" 
 
       # - name: Authenticate Google Cloud
       #   id: 'gcp-auth'
