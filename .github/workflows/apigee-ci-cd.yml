@@ -2,7 +2,11 @@ name: Apigee CI with apigeecli
 
 # Controls when the workflow will run
 on: push
-
+  inputs:
+    org:
+      description: 'Define org name'     
+      required: true
+      default: 'prod-org'
 #env:
   #GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
@@ -25,6 +29,10 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Print
+        run: |
+        echo "Org: ${{ github.event.inputs.org }}" 
 
       # - name: Authenticate Google Cloud
       #   id: 'gcp-auth'
