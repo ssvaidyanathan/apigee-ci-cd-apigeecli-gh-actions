@@ -19,7 +19,7 @@ jobs:
       - name: Apigeecli Version
         uses: docker://ghcr.io/apigee/apigeecli:latest
         id: apigeecli-version
-        with: |
+        with:
           args: --version
 
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
