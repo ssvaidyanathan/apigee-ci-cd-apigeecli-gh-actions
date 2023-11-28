@@ -17,14 +17,14 @@ jobs:
       image: ghcr.io/apigee/apigeecli:latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      # - name: Checkout
-      #   uses: actions/checkout@v3
-
       - name: Apigeecli Version
         id: apigeecli-version
         run: |
           apigeecli --version
+
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout
+        uses: actions/checkout@v3
 
       # - name: Authenticate Google Cloud
       #   id: 'gcp-auth'
