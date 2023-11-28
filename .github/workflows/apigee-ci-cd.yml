@@ -2,12 +2,7 @@ name: Apigee CI with apigeecli
 
 # Controls when the workflow will run
 on: push
-  workflow_dispatch:
-    inputs:
-      org:
-        description: 'Define org name'     
-        required: true
-        default: 'prod-org'
+
 #env:
   #GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
@@ -31,8 +26,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Print
-        run: echo "Org ${{ github.event.inputs.org }}" 
+      # Set Variables depending on branch
+      - name: Set Variables for [Main] branch
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "APIGEE_ORG=bap-amer-coe-demo1" >> $GITHUB_ENV
+          echo "APIGEE_ENV=test" >> $GITHUB_ENV
+          echo "DEPLOYMENT_USER=cicduser" >> $GITHUB_ENV
+          echo "DEPLOYMENT_SUFFIX=$(echo "")" >> $GITHUB_ENV
+
+      - name: Set Variables for [Prod] branch
+        if: github.ref == 'refs/heads/prod'
+        run: |
+          echo "APIGEE_ORG=sai-apigeex-demo" >> $GITHUB_ENV
+          echo "APIGEE_ENV=prod" >> $GITHUB_ENV
+          echo "DEPLOYMENT_USER=cicduser" >> $GITHUB_ENV
+          echo "DEPLOYMENT_SUFFIX=$(echo "")" >> $GITHUB_ENV
+      
+      - name: Set Variables for branch not [Main], not [Prod]
+        if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/prod'
+        run: |
+          echo "APIGEE_ORG=bap-amer-coe-demo1" >> $GITHUB_ENV
+          echo "APIGEE_ENV=dev" >> $GITHUB_ENV
+          echo "DEPLOYMENT_USER=cicduser" >> $GITHUB_ENV
+          echo "DEPLOYMENT_SUFFIX=$(echo "")" >> $GITHUB_ENV
 
       # - name: Authenticate Google Cloud
       #   id: 'gcp-auth'
