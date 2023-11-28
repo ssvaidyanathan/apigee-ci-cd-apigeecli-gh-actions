@@ -2,7 +2,7 @@ name: Apigee CI with apigeecli
 
 # Controls when the workflow will run
 on:
-  push:
+  workflow_dispatch:
     inputs:
       org:
         description: 'Define org name'     
@@ -32,8 +32,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Print
-        run: |
-        echo "Org: ${{ github.event.inputs.org }}" 
+        run: echo "Org ${{ github.event.inputs.org }}" 
 
       # - name: Authenticate Google Cloud
       #   id: 'gcp-auth'
