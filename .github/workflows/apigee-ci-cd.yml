@@ -19,8 +19,8 @@ jobs:
       - name: Apigeecli Version
         uses: ghcr.io/apigee/apigeecli:latest
         id: apigeecli-version
-        run: |
-          apigeecli --version
+        with: |
+          args: --version
 
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
