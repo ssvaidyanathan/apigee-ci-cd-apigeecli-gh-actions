@@ -52,7 +52,7 @@ jobs:
           echo "DEPLOYMENT_SUFFIX=$(echo "")" >> $GITHUB_ENV
 
       - name: Print
-        run: echo "APIGEE_ORG ${{ APIGEE_ORG }}" 
+        run: echo "APIGEE_ORG ${APIGEE_ORG}" 
 
       # - name: Authenticate Google Cloud
       #   id: 'gcp-auth'
