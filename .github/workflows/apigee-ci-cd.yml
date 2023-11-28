@@ -1,8 +1,8 @@
 name: Apigee CI with apigeecli
 
 # Controls when the workflow will run
-on: push
-  workflow_dispatch:
+on:
+  push:
     inputs:
       org:
         description: 'Define org name'     
