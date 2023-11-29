@@ -65,7 +65,7 @@ jobs:
         uses: docker://ghcr.io/apigee/apigeecli:latest
         id: apigeecli-import-bundle
         with:
-          args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }} --disable-check >> $GITHUB_WORKSPACE/tmp/revision
+          args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }} --disable-check >> ${{ env.GITHUB_WORKSPACE }}/tmp/revision
 
       - name: Print
         run: |
