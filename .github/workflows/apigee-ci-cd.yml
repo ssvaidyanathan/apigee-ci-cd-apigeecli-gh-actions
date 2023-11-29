@@ -3,13 +3,15 @@ name: Apigee CI with apigeecli
 # Controls when the workflow will run
 on: push
 
-#env:
-  #GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -30,33 +32,33 @@ jobs:
       - name: Set Variables for [Main] branch
         if: github.ref == 'refs/heads/main'
         run: |
-          echo "APIGEE_ORG=bap-amer-coe-demo1" >> $GITHUB_ENV
-          echo "APIGEE_PROFILE=test" >> $GITHUB_ENV
-          echo "DEPLOYMENT_USER=cicduser" >> $GITHUB_ENV
-          echo "DEPLOYMENT_SUFFIX=$(echo "")" >> $GITHUB_ENV
+          echo "APIGEE_ORG=ssv-apigee-asm-demo" >> $GITHUB_ENV
+          echo "APIGEE_ENV=eval" >> $GITHUB_ENV
+          echo "WORKLOAD_IDENTITY_POOL=projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider" >> $GITHUB_ENV
 
       - name: Set Variables for [Prod] branch
         if: github.ref == 'refs/heads/prod'
         run: |
-          echo "APIGEE_ORG=sai-apigeex-demo" >> $GITHUB_ENV
-          echo "APIGEE_PROFILE=prod" >> $GITHUB_ENV
-          echo "DEPLOYMENT_USER=cicduser" >> $GITHUB_ENV
-          echo "DEPLOYMENT_SUFFIX=$(echo "")" >> $GITHUB_ENV
-      
+          echo "APIGEE_ORG=ssv-apigee-asm-demo" >> $GITHUB_ENV
+          echo "APIGEE_ENV=eval" >> $GITHUB_ENV
+          echo "WORKLOAD_IDENTITY_POOL=projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider" >> $GITHUB_ENV
+
       - name: Set Variables for branch not [Main], not [Prod]
         if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/prod'
         run: |
-          echo "APIGEE_ORG=bap-amer-coe-demo1" >> $GITHUB_ENV
-          echo "APIGEE_PROFILE=dev" >> $GITHUB_ENV
-          echo "DEPLOYMENT_USER=cicduser" >> $GITHUB_ENV
-          echo "DEPLOYMENT_SUFFIX=$(echo "")" >> $GITHUB_ENV
+          echo "APIGEE_ORG=ssv-apigee-asm-demo" >> $GITHUB_ENV
+          echo "APIGEE_ENV=eval" >> $GITHUB_ENV
+          echo "WORKLOAD_IDENTITY_POOL=projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider" >> $GITHUB_ENV
 
-      - name: Print
-        run: echo "APIGEE_ORG ${APIGEE_ORG}" 
+      - name: Authenticate Google Cloud
+        id: 'gcp-auth'
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: '${APIGEE_ORG}'
+          workload_identity_provider: '${WORKLOAD_IDENTITY_POOL}'
+          token_format: 'access_token'
 
-      # - name: Authenticate Google Cloud
-      #   id: 'gcp-auth'
-      #   uses: google-github-actions/auth@v1
-      #   with:
-      #     token_format: 'access_token'
-      #     service_account: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
+      - name: Access Apigee API
+        run: |-
+          curl https://apigee.googleapis.com/v1/projects/${APIGEE_ORG} \
+          --header "Authorization: Bearer ${steps.gcp-auth.outputs.access_token}"
