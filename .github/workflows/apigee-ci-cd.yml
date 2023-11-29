@@ -19,7 +19,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Apigeecli Version
-        uses: docker://ghcr.io/apigee/apigeecli:latest
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
         id: apigeecli-version
         with:
           args: --version
@@ -59,18 +60,19 @@ jobs:
           token_format: 'access_token'
 
       - name: Apigeecli Get Org
-        uses: docker://ghcr.io/apigee/apigeecli:latest
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
         id: apigeecli-get-org
         with:
-          entrypoint: sh
-          args: -c "apigeecli orgs get -o ${{ env.APIGEE_ORG }} -t ${{ steps.gcp-auth.outputs.access_token }}" | jq -r .state | xargs
+          args: orgs get -o ${{ env.APIGEE_ORG }} -t ${{ steps.gcp-auth.outputs.access_token }}
 
-      # - name: Apigeecli Import Bundle
-      #   uses: docker://ghcr.io/apigee/apigeecli:latest
-      #   id: apigeecli-import-bundle
-      #   with:
-      #     args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }} --disable-check >> ${{ env.GITHUB_WORKSPACE }}/tmp/revision
-
+      - name: Apigeecli Import Bundle
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+        id: apigeecli-import-bundle
+        with:
+          args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --env ${{ env.APIGEE_ENV }} --token ${{ steps.gcp-auth.outputs.access_token }} --wait 
+      
       # - name: Print
       #   run: |
       #     cat $GITHUB_WORKSPACE/tmp/revision
