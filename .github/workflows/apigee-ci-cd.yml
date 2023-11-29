@@ -72,7 +72,3 @@ jobs:
         id: apigee-proxy-deploy
         with:
           args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --env ${{ env.APIGEE_ENV }} --token ${{ steps.gcp-auth.outputs.access_token }} --wait -r
-      
-      # - name: Print
-      #   run: |
-      #     cat $GITHUB_WORKSPACE/tmp/revision
