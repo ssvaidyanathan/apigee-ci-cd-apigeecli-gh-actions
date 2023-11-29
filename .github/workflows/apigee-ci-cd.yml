@@ -64,5 +64,5 @@ jobs:
 
       - name: Access Apigee API
         run: |-
-          curl https://apigee.googleapis.com/v1/projects/${APIGEE_ORG} \
+          curl https://apigee.googleapis.com/v1/organizations/${APIGEE_ORG} \
           --header "Authorization: Bearer ${{ steps.gcp-auth.outputs.access_token }}"
