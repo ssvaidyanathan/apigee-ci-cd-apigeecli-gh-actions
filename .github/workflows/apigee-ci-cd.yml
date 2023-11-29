@@ -62,7 +62,7 @@ jobs:
         uses: docker://ghcr.io/apigee/apigeecli:latest
         id: apigeecli-get-org
         with:
-          entrypoint: /bin/sh
+          entrypoint: sh
           args: -c "apigeecli orgs get -o ${{ env.APIGEE_ORG }} -t ${{ steps.gcp-auth.outputs.access_token }}" | jq -r .state | xargs
 
       # - name: Apigeecli Import Bundle
