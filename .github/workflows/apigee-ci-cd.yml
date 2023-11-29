@@ -66,10 +66,10 @@ jobs:
       #   with:
       #     args: orgs get -o ${{ env.APIGEE_ORG }} -t ${{ steps.gcp-auth.outputs.access_token }}
 
-      - name: Apigeecli Import Bundle
+      - name: Apigee proxy deploy 
         #uses: docker://ghcr.io/apigee/apigeecli:latest
         uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
-        id: apigeecli-import-bundle
+        id: apigee-proxy-deploy
         with:
           args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --env ${{ env.APIGEE_ENV }} --token ${{ steps.gcp-auth.outputs.access_token }} --wait -r
       
