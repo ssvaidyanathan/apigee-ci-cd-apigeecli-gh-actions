@@ -61,7 +61,14 @@ jobs:
           service_account: 'apigee-ci-cd@ssv-apigee-asm-demo.iam.gserviceaccount.com'
           token_format: 'access_token'
 
-      - name: Access Apigee API
-        run: |-
-          curl https://apigee.googleapis.com/v1/organizations/${APIGEE_ORG} \
-          --header "Authorization: Bearer ${{ steps.gcp-auth.outputs.access_token }}"
+      - name: Apigeecli Set Preference
+        uses: docker://ghcr.io/apigee/apigeecli:latest
+        id: apigeecli-set-pref
+        with:
+          args: prefs set -o ${APIGEE_ORG}
+
+      - name: Apigeecli Set Preference
+        uses: docker://ghcr.io/apigee/apigeecli:latest
+        id: apigeecli-set-pref
+        with:
+          args: orgs get -t ${{ steps.gcp-auth.outputs.access_token }}
