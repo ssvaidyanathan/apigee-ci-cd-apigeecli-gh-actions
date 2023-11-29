@@ -57,9 +57,8 @@ jobs:
         id: 'gcp-auth'
         uses: google-github-actions/auth@v1
         with:
-          project_id: '${{ APIGEE_ORG }}'
-          workload_identity_provider: '${{ WORKLOAD_IDENTITY_POOL }}'
-          service_account: '${{ SERVICE_ACCOUNT }}'
+          workload_identity_provider: 'projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider'
+          service_account: 'apigee-ci-cd@ssv-apigee-asm-demo.iam.gserviceaccount.com'
           token_format: 'access_token'
 
       - name: Access Apigee API
