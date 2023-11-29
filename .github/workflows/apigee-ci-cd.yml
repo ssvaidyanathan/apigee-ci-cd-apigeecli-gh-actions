@@ -69,6 +69,6 @@ jobs:
 
       - name: Apigeecli Set Preference
         uses: docker://ghcr.io/apigee/apigeecli:latest
-        id: apigeecli-set-pref
+        id: apigeecli-get-org
         with:
           args: orgs get -t ${{ steps.gcp-auth.outputs.access_token }}
