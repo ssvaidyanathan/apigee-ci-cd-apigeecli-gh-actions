@@ -34,24 +34,18 @@ jobs:
         run: |
           echo "APIGEE_ORG=ssv-apigee-asm-demo" >> $GITHUB_ENV
           echo "APIGEE_ENV=eval" >> $GITHUB_ENV
-          echo "WORKLOAD_IDENTITY_POOL=projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider" >> $GITHUB_ENV
-          echo "SERVICE_ACCOUNT=apigee-ci-cd@ssv-apigee-asm-demo.iam.gserviceaccount.com" >> $GITHUB_ENV
 
       - name: Set Variables for [Prod] branch
         if: github.ref == 'refs/heads/prod'
         run: |
           echo "APIGEE_ORG=ssv-apigee-asm-demo" >> $GITHUB_ENV
           echo "APIGEE_ENV=eval" >> $GITHUB_ENV
-          echo "WORKLOAD_IDENTITY_POOL=projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider" >> $GITHUB_ENV
-          echo "SERVICE_ACCOUNT=apigee-ci-cd@ssv-apigee-asm-demo.iam.gserviceaccount.com" >> $GITHUB_ENV
 
       - name: Set Variables for branch not [Main], not [Prod]
         if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/prod'
         run: |
           echo "APIGEE_ORG=ssv-apigee-asm-demo" >> $GITHUB_ENV
           echo "APIGEE_ENV=eval" >> $GITHUB_ENV
-          echo "WORKLOAD_IDENTITY_POOL=projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider" >> $GITHUB_ENV
-          echo "SERVICE_ACCOUNT=apigee-ci-cd@ssv-apigee-asm-demo.iam.gserviceaccount.com" >> $GITHUB_ENV
 
       - name: Authenticate Google Cloud
         id: 'gcp-auth'
