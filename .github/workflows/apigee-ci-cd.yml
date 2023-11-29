@@ -57,12 +57,12 @@ jobs:
         id: 'gcp-auth'
         uses: google-github-actions/auth@v1
         with:
-          project_id: '${APIGEE_ORG}'
-          workload_identity_provider: '${WORKLOAD_IDENTITY_POOL}'
-          service_account: '${SERVICE_ACCOUNT}'
+          project_id: '${{ APIGEE_ORG }}'
+          workload_identity_provider: '${{ WORKLOAD_IDENTITY_POOL }}'
+          service_account: '${{ SERVICE_ACCOUNT }}'
           token_format: 'access_token'
 
       - name: Access Apigee API
         run: |-
           curl https://apigee.googleapis.com/v1/projects/${APIGEE_ORG} \
-          --header "Authorization: Bearer ${steps.gcp-auth.outputs.access_token}"
+          --header "Authorization: Bearer ${{ steps.gcp-auth.outputs.access_token }}"
