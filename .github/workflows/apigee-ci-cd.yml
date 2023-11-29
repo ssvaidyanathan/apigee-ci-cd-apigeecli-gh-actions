@@ -34,18 +34,21 @@ jobs:
         run: |
           echo "APIGEE_ORG=ssv-apigee-asm-demo" >> $GITHUB_ENV
           echo "APIGEE_ENV=eval" >> $GITHUB_ENV
+          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" >> $GITHUB_ENV
 
       - name: Set Variables for [Prod] branch
         if: github.ref == 'refs/heads/prod'
         run: |
           echo "APIGEE_ORG=ssv-apigee-asm-demo" >> $GITHUB_ENV
           echo "APIGEE_ENV=eval" >> $GITHUB_ENV
+          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" >> $GITHUB_ENV
 
       - name: Set Variables for branch not [Main], not [Prod]
         if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/prod'
         run: |
           echo "APIGEE_ORG=ssv-apigee-asm-demo" >> $GITHUB_ENV
           echo "APIGEE_ENV=eval" >> $GITHUB_ENV
+          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" >> $GITHUB_ENV
 
       - name: Authenticate Google Cloud
         id: 'gcp-auth'
@@ -65,7 +68,7 @@ jobs:
         uses: docker://ghcr.io/apigee/apigeecli:latest
         id: apigeecli-import-bundle
         with:
-          args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }} --disable-check >> ${{ GITHUB_WORKSPACE }}/tmp/revision
+          args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }} --disable-check >> ${{ env.GITHUB_WORKSPACE }}/tmp/revision
 
       - name: Print
         run: |
