@@ -71,7 +71,7 @@ jobs:
         uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
         id: apigeecli-import-bundle
         with:
-          args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --env ${{ env.APIGEE_ENV }} --token ${{ steps.gcp-auth.outputs.access_token }} --wait 
+          args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --env ${{ env.APIGEE_ENV }} --token ${{ steps.gcp-auth.outputs.access_token }} --wait -r
       
       # - name: Print
       #   run: |
