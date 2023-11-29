@@ -65,4 +65,4 @@ jobs:
         uses: docker://ghcr.io/apigee/apigeecli:latest
         id: apigeecli-get-org
         with:
-          args: orgs get -o ${APIGEE_ORG} -t ${{ steps.gcp-auth.outputs.access_token }}
+          args: orgs get -o ${{ env.APIGEE_ORG }} -t ${{ steps.gcp-auth.outputs.access_token }}
