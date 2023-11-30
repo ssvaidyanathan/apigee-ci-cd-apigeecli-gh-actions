@@ -55,5 +55,3 @@ echo "WORKLOAD_IDENTITY_POOL_NAME: ${WORKLOAD_IDENTITY_POOL_NAME}"
 # projects/projectId/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider
 
 ```
-
-projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider
