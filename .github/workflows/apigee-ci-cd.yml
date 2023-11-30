@@ -133,14 +133,14 @@ jobs:
       - name: Apigee API Products
         #uses: docker://ghcr.io/apigee/apigeecli:latest
         uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
-        id: apigee-proxy-deploy
+        id: apigee-apiproducts
         with:
           args: products import -f config/apigee/org/apiProducts.json --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
 
       - name: Apigee Developer
         #uses: docker://ghcr.io/apigee/apigeecli:latest
         uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
-        id: apigee-proxy-deploy
+        id: apigee-developer
         with:
           args: developers import -f config/apigee/org/developers.json --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
 
