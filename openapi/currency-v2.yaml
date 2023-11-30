@@ -1,10 +1,10 @@
 swagger: '2.0'
 info:
-  description: 'OpenAPI Specification for the Currency API Version 1'
+  description: 'OpenAPI Specification for the Currency API Version 2'
   version: 1.0.0
-  title: Currency API v1
+  title: Currency API v2
 host: demo-test.apigee.net
-basePath: /currency/v1
+basePath: /currency/v2
 schemes:
   - https
 paths:

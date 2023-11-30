@@ -55,6 +55,6 @@
 	</RouteRule>
 
 	<HTTPProxyConnection>
-		<BasePath>/currency/v1</BasePath>
+		<BasePath>/currency/v2</BasePath>
 	</HTTPProxyConnection>
 </ProxyEndpoint>

@@ -1,6 +1,6 @@
 {
 	"currencyApi": {
-		"domain": "demo-test.apigee.net",
-		"basepath": "/currency/v1"
+		"domain": "34.117.135.82.nip.io",
+		"basepath": "/currency/v2"
 	}
 }

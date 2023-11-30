@@ -34,7 +34,7 @@ describe('feature: loggly integration', function() {
 		mock.contextGetVariableMethod.withArgs('flow.apigee.error.message').returns('resource not found');
 		mock.contextGetVariableMethod.withArgs('flow.apigee.error.status').returns('404');
 		mock.contextGetVariableMethod.withArgs('flow.apigee.error.code').returns('404.01.001');
-		mock.contextGetVariableMethod.withArgs('proxy.basepath').returns('/currency/v1');
+		mock.contextGetVariableMethod.withArgs('proxy.basepath').returns('/currency/v2');
 		mock.contextGetVariableMethod.withArgs('proxy.pathsuffix').returns('/rates');
 		mock.contextGetVariableMethod.withArgs('flow.apigee.originalRequest.header.X-Forwarded-Proto').returns('https');
 		mock.contextGetVariableMethod.withArgs('flow.apigee.originalRequest.header.Host').returns('demo-org.apigee.net');
@@ -47,7 +47,7 @@ describe('feature: loggly integration', function() {
 			expect(mock.httpClientSendMethod.calledOnce).to.be.true;
 
 			var logglyRequestArguments = mock.requestConstr.args[0];
-			expect(logglyRequestArguments[0]).to.equal('https://demo-org.apigee.net/currency/v1/logs');
+			expect(logglyRequestArguments[0]).to.equal('https://demo-org.apigee.net/currency/v2/logs');
 			expect(logglyRequestArguments[1]).to.equal('POST');
 			expect(logglyRequestArguments[2]['Content-Type']).to.equal('application/json');
 
