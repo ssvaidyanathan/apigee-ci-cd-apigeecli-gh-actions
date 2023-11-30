@@ -135,5 +135,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: apickli-report
-          path: ./cucumber_report.html
+          path: ./cucumber-report.html
           retention-days: 5
