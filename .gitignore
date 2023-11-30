@@ -1,1 +1,4 @@
 .DS_Store
+cucumber_report.html
+node_modules/
+report.json
