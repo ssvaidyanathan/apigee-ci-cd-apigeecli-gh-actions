@@ -1,12 +1,11 @@
-{
-    "grant@enterprise.com": [
-        {
-            "apiProducts": [
-                "currencyProduct"
-            ],
-            "callbackUrl": "http://localhost:8080",
-            "name": "currencyApp",
-            "scopes": []
-        }
-    ]
-}
+[
+    {
+        "apiProducts": [
+            "currencyProduct"
+        ],
+        "callbackUrl": "http://localhost:8080",
+        "name": "currencyApp",
+        "scopes": [],
+        "developerId": "abc"
+    }
+]

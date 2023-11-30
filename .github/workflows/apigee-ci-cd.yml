@@ -3,6 +3,10 @@ name: Apigee CI with apigeecli
 # Controls when the workflow will run
 on: push
 
+env:
+  WORKLOAD_IDENTITY_PROVIDER_NAME=projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider
+  SERVICE_ACCOUNT=apigee-ci-cd@ssv-apigee-asm-demo.iam.gserviceaccount.com
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -35,21 +39,18 @@ jobs:
         run: |
           echo "APIGEE_ORG=ssv-apigee-asm-demo" >> $GITHUB_ENV
           echo "APIGEE_ENV=eval" >> $GITHUB_ENV
-          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" >> $GITHUB_ENV
 
       - name: Set Variables for [Prod] branch
         if: github.ref == 'refs/heads/prod'
         run: |
           echo "APIGEE_ORG=ssv-apigee-asm-demo" >> $GITHUB_ENV
           echo "APIGEE_ENV=eval" >> $GITHUB_ENV
-          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" >> $GITHUB_ENV
 
       - name: Set Variables for branch not [Main], not [Prod]
         if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/prod'
         run: |
           echo "APIGEE_ORG=ssv-apigee-asm-demo" >> $GITHUB_ENV
           echo "APIGEE_ENV=eval" >> $GITHUB_ENV
-          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" >> $GITHUB_ENV
 
       # Create Dependencies (npm) Cache 
       - name: Cache node modules
@@ -98,13 +99,13 @@ jobs:
           path: ./code_test_output/coverage-output.html
           retention-days: 5
 
-      # - name: Authenticate Google Cloud
-      #   id: 'gcp-auth'
-      #   uses: google-github-actions/auth@v1
-      #   with:
-      #     workload_identity_provider: 'projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider'
-      #     service_account: 'apigee-ci-cd@ssv-apigee-asm-demo.iam.gserviceaccount.com'
-      #     token_format: 'access_token'
+      - name: Authenticate Google Cloud
+        id: 'gcp-auth'
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: '${ env.WORKLOAD_IDENTITY_PROVIDER_NAME }}'
+          service_account: '${{ env.SERVICE_ACCOUNT }}'
+          token_format: 'access_token'
 
       # - name: Apigeecli Get Org
       #   #uses: docker://ghcr.io/apigee/apigeecli:latest
@@ -113,19 +114,37 @@ jobs:
       #   with:
       #     args: orgs get -o ${{ env.APIGEE_ORG }} -t ${{ steps.gcp-auth.outputs.access_token }}
 
-      # - name: Apigee Target Server
-      #   #uses: docker://ghcr.io/apigee/apigeecli:latest
-      #   uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
-      #   id: apigee-target-server
-      #   with:
-      #     args: targetservers import -f config/apigee/env/${{ env.APIGEE_ENV }}/targetServers.json --env ${{ env.APIGEE_ENV }} --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
+      - name: Apigee Target Server
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+        id: apigee-target-server
+        with:
+          args: targetservers import -f config/apigee/env/${{ env.APIGEE_ENV }}/targetServers.json --env ${{ env.APIGEE_ENV }} --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
 
-      # - name: Apigee proxy deploy 
-      #   #uses: docker://ghcr.io/apigee/apigeecli:latest
-      #   uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
-      #   id: apigee-proxy-deploy
-      #   with:
-      #     args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --env ${{ env.APIGEE_ENV }} --token ${{ steps.gcp-auth.outputs.access_token }} --wait -r
+      # TODO: Proxy description with commit SHA
+
+      - name: Apigee proxy deploy 
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+        id: apigee-proxy-deploy
+        with:
+          args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --env ${{ env.APIGEE_ENV }} --token ${{ steps.gcp-auth.outputs.access_token }} --wait -r
+
+      - name: Apigee API Products
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+        id: apigee-proxy-deploy
+        with:
+          args: products import -f config/apigee/org/apiProducts.json --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
+
+      - name: Apigee Developer
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+        id: apigee-proxy-deploy
+        with:
+          args: developers import -f config/apigee/org/developers.json --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
+
+      # TODO: App
 
       # Run Functional test
       - name: Functional Testing

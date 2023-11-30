@@ -1,9 +1,11 @@
-[
-    {
-        "attributes": [],
-        "email": "grant@enterprise.com",
-        "firstName": "Grant",
-        "lastName": "Smith",
-        "userName": "grantsmith"
-    }
-]
+{
+    "developer":[
+       {
+          "attributes":[],
+          "email":"grant@enterprise.com",
+          "firstName":"Grant",
+          "lastName":"Smith",
+          "userName":"grantsmith"
+       }
+    ]
+ }
