@@ -153,6 +153,7 @@ jobs:
         id: apigee-developer-app
         with:
           args: apps create -n ${{ env.APP_NAME }} -e grant@enterprise.com -p ${{ env.APIPRODUCT_NAME }} --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
+      
       # Run Functional test
       - name: Functional Testing
         run: npm run integration-test

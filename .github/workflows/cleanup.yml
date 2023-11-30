@@ -1,0 +1,84 @@
+name: Clean up
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+    inputs:
+      PROXY_NAME:
+        description: 'API Proxy Name'     
+        required: true
+        default: 'currency-v2'
+      APIPRODUCT_NAME:
+        description: 'API Producy Name'     
+        required: true
+        default: 'currencyProduct'
+      APP_NAME:
+        description: 'App Name'     
+        required: true
+        default: 'currencyApp'
+
+env:
+  WORKLOAD_IDENTITY_PROVIDER_NAME: projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider
+  SERVICE_ACCOUNT: apigee-ci-cd@ssv-apigee-asm-demo.iam.gserviceaccount.com
+
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Apigeecli Version
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+        id: apigeecli-version
+        with:
+          args: --version
+
+      - name: Authenticate Google Cloud
+        id: 'gcp-auth'
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER_NAME }}'
+          service_account: '${{ env.SERVICE_ACCOUNT }}'
+          token_format: 'access_token'
+
+      - name: Delete Apigee Developer App
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+        id: apigee-delete-developer-app
+        with:
+          args: apps delete -n ${{ env.APP_NAME }} --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
+      
+      - name: Delete Apigee Developer
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+        id: apigee-delete-apiprpoxy
+        with:
+          args: developers delete -n grant@enterprise.com --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
+      
+      - name: Delete Apigee API Product
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+        id: apigee-delete-apiproduct
+        with:
+          args: products delete -n ${{ env.APIPRODUCT_NAME }} --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
+      
+      - name: Delete Apigee API Proxy
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+        id: apigee-delete-apiprpoxy
+        with:
+          args: apis delete -n ${{ env.PROXY_NAME }} --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
+      
+      - name: Delete Apigee Targetserver
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+        id: apigee-delete-apiprpoxy
+        with:
+          args: targetservers delete -n currencyTarget --org ${{ env.APIGEE_ORG }} --env ${{ env.APIGEE_ENV }} --token ${{ steps.gcp-auth.outputs.access_token }}
+      
