@@ -57,7 +57,7 @@ jobs:
       - name: Delete Apigee Developer
         #uses: docker://ghcr.io/apigee/apigeecli:latest
         uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
-        id: apigee-delete-apiprpoxy
+        id: apigee-delete-developer
         with:
           args: developers delete -n grant@enterprise.com --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
       
@@ -71,14 +71,14 @@ jobs:
       - name: Delete Apigee API Proxy
         #uses: docker://ghcr.io/apigee/apigeecli:latest
         uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
-        id: apigee-delete-apiprpoxy
+        id: apigee-delete-apiproxy
         with:
           args: apis delete -n ${{ env.PROXY_NAME }} --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
       
       - name: Delete Apigee Targetserver
         #uses: docker://ghcr.io/apigee/apigeecli:latest
         uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
-        id: apigee-delete-apiprpoxy
+        id: apigee-delete-targetserver
         with:
           args: targetservers delete -n currencyTarget --org ${{ env.APIGEE_ORG }} --env ${{ env.APIGEE_ENV }} --token ${{ steps.gcp-auth.outputs.access_token }}
       
