@@ -129,7 +129,9 @@ jobs:
 
       # Run Functional test
       - name: Functional Testing
-        run: npm run integration-test
+        run: |
+            node ./node_modules/.bin/cucumber-js ./test/integration --format json:./report.json
+            node test/integration/reporter.js
 
       #Upload the functional test results
       - name: Archive Apickli results
