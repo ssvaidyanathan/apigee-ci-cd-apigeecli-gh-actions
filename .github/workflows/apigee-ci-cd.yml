@@ -130,3 +130,10 @@ jobs:
       # Run Functional test
       - name: Functional Testing
         run: npm run integration-test
+
+      - name: Archive Apickli results
+        uses: actions/upload-artifact@v3
+        with:
+          name: apickli-report
+          path: ./cucumber_report.html
+          retention-days: 5
