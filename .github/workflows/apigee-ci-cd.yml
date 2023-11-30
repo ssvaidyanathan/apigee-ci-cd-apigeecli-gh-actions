@@ -66,6 +66,13 @@ jobs:
       #   with:
       #     args: orgs get -o ${{ env.APIGEE_ORG }} -t ${{ steps.gcp-auth.outputs.access_token }}
 
+      - name: Apigee Target Server
+        #uses: docker://ghcr.io/apigee/apigeecli:latest
+        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+        id: apigee-target-server
+        with:
+          args: targetservers import -f config/apigee/env/${{ env.APIGEE_ENV }}/targetServers.json --env ${{ env.APIGEE_ENV }} --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
+
       - name: Apigee proxy deploy 
         #uses: docker://ghcr.io/apigee/apigeecli:latest
         uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
