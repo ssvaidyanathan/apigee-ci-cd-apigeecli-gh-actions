@@ -51,6 +51,53 @@ jobs:
           echo "APIGEE_ENV=eval" >> $GITHUB_ENV
           echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" >> $GITHUB_ENV
 
+      # Create Dependencies (npm) Cache 
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` 
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      
+      # Install dependencies (npm)
+      - name: Install Dependencies
+        run: npm install --silent --no-fund
+
+      # Run Static Code analysis and upload lint results
+      - name: Static Code Analysis
+        run: npm run lint
+
+      - name: Archive Apigeelint results
+        uses: actions/upload-artifact@v2
+        with:
+          name: apigeelint-report
+          path: ./code_test_output/apigeelint-output.html
+          retention-days: 5
+      
+      - name: Archive ESLint results
+        uses: actions/upload-artifact@v2
+        with:
+          name: eslint-report
+          path: ./code_test_output/eslint-output.html
+          retention-days: 5
+
+      # Run Unit Testing and Code Coverage
+      - name: Unit Testing and Code Coverage
+        run: npm run unit-test
+
+      - name: Archive Code Coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report
+          path: ./code_test_output/coverage-output.html
+          retention-days: 5
+
       - name: Authenticate Google Cloud
         id: 'gcp-auth'
         uses: google-github-actions/auth@v1
@@ -79,3 +126,15 @@ jobs:
         id: apigee-proxy-deploy
         with:
           args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --env ${{ env.APIGEE_ENV }} --token ${{ steps.gcp-auth.outputs.access_token }} --wait -r
+
+      # Run Functional test
+      - name: Functional Testing
+        run: npm run integration-test
+
+      #Upload the functional test results
+      - name: Archive Functional Testing results
+        uses: actions/upload-artifact@v2
+        with:
+          name: functional-test-report
+          path: ./target/cucumber_report.html
+          retention-days: 5
