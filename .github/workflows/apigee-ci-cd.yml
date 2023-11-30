@@ -98,13 +98,13 @@ jobs:
           path: ./code_test_output/coverage-output.html
           retention-days: 5
 
-      - name: Authenticate Google Cloud
-        id: 'gcp-auth'
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: 'projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider'
-          service_account: 'apigee-ci-cd@ssv-apigee-asm-demo.iam.gserviceaccount.com'
-          token_format: 'access_token'
+      # - name: Authenticate Google Cloud
+      #   id: 'gcp-auth'
+      #   uses: google-github-actions/auth@v1
+      #   with:
+      #     workload_identity_provider: 'projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider'
+      #     service_account: 'apigee-ci-cd@ssv-apigee-asm-demo.iam.gserviceaccount.com'
+      #     token_format: 'access_token'
 
       # - name: Apigeecli Get Org
       #   #uses: docker://ghcr.io/apigee/apigeecli:latest
@@ -113,28 +113,28 @@ jobs:
       #   with:
       #     args: orgs get -o ${{ env.APIGEE_ORG }} -t ${{ steps.gcp-auth.outputs.access_token }}
 
-      - name: Apigee Target Server
-        #uses: docker://ghcr.io/apigee/apigeecli:latest
-        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
-        id: apigee-target-server
-        with:
-          args: targetservers import -f config/apigee/env/${{ env.APIGEE_ENV }}/targetServers.json --env ${{ env.APIGEE_ENV }} --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
+      # - name: Apigee Target Server
+      #   #uses: docker://ghcr.io/apigee/apigeecli:latest
+      #   uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+      #   id: apigee-target-server
+      #   with:
+      #     args: targetservers import -f config/apigee/env/${{ env.APIGEE_ENV }}/targetServers.json --env ${{ env.APIGEE_ENV }} --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
 
-      - name: Apigee proxy deploy 
-        #uses: docker://ghcr.io/apigee/apigeecli:latest
-        uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
-        id: apigee-proxy-deploy
-        with:
-          args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --env ${{ env.APIGEE_ENV }} --token ${{ steps.gcp-auth.outputs.access_token }} --wait -r
+      # - name: Apigee proxy deploy 
+      #   #uses: docker://ghcr.io/apigee/apigeecli:latest
+      #   uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
+      #   id: apigee-proxy-deploy
+      #   with:
+      #     args: apis create bundle -f apiproxy -n currency-v2 --org ${{ env.APIGEE_ORG }} --env ${{ env.APIGEE_ENV }} --token ${{ steps.gcp-auth.outputs.access_token }} --wait -r
 
       # Run Functional test
       - name: Functional Testing
         run: npm run integration-test
 
       #Upload the functional test results
-      - name: Archive Functional Testing results
-        uses: actions/upload-artifact@v2
+      - name: Archive Apickli results
+        uses: actions/upload-artifact@v3
         with:
-          name: functional-test-report
-          path: ./target/cucumber_report.html
+          name: apickli-report
+          path: ./cucumber_report.html
           retention-days: 5
