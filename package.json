@@ -1,5 +1,5 @@
 {
-	"name": "currency-v1",
+	"name": "currency-v2",
 	"version": "1.0.0",
 	"devDependencies": {
 		"@cucumber/cucumber": "^7.3.0",

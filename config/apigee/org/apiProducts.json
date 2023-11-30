@@ -27,10 +27,10 @@
             }
         ],
         "environments": [
-            "env-name"
+            "eval"
         ],
         "proxies": [
-            "proxy-name"
+            "currency-v2"
         ],
         "quota": "10000",
         "quotaInterval": "1",
