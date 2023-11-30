@@ -4,8 +4,8 @@ name: Apigee CI with apigeecli
 on: push
 
 env:
-  WORKLOAD_IDENTITY_PROVIDER_NAME=projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider
-  SERVICE_ACCOUNT=apigee-ci-cd@ssv-apigee-asm-demo.iam.gserviceaccount.com
+  WORKLOAD_IDENTITY_PROVIDER_NAME: projects/769749427232/locations/global/workloadIdentityPools/apigee-ci-cd-pool/providers/apigee-ci-cd-pool-provider
+  SERVICE_ACCOUNT: apigee-ci-cd@ssv-apigee-asm-demo.iam.gserviceaccount.com
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
