@@ -147,10 +147,10 @@ jobs:
         with:
           args: developers import -f config/apigee/org/developers.json --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
 
-      - name: Apigee Developer
+      - name: Apigee Developer App
         #uses: docker://ghcr.io/apigee/apigeecli:latest
         uses: docker://ghcr.io/apigee/apigeecli:v1.125.1-beta
-        id: apigee-developer
+        id: apigee-developer-app
         with:
           args: apps create -n ${{ env.APP_NAME }} -e grant@enterprise.com -p ${{ env.APIPRODUCT_NAME }} --org ${{ env.APIGEE_ORG }} --token ${{ steps.gcp-auth.outputs.access_token }}
       # Run Functional test
